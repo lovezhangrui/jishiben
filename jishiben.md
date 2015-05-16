@@ -137,8 +137,8 @@ class Mynotepad extends JFrame{
   void initAboutDialog(){
       about.setLayout(new GridLayout(3,1));
       about.getContentPane().setBackground(Color.white);
-      about.getContentPane().add(new JLabel("张瑞的记事本程序"));
-      about.getContentPane().add(new JLabel("制作者：张瑞201303014091"));
+      about.getContentPane().add(new JLabel("张瑞和李香的记事本程序"));
+      about.getContentPane().add(new JLabel("制作者：张瑞李香"));
       about.getContentPane().add(new JLabel("2015年5月13日"));
       about.setModal(true);
       about.setSize(100,100);
@@ -153,7 +153,7 @@ public class Notepad{
                 
               noted.addWindowListener(new WindowAdapter(){
                   });
-                       noted.setTitle("张瑞的记事本程序");
+                       noted.setTitle("张瑞和李香的记事本程序");
 		               noted.setSize(640,320);
 		               noted.show();
 		               noted.setLocation(150,100);
