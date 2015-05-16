@@ -1,0 +1,161 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.io.*;
+
+class Mynotepad extends JFrame{
+    File file=null;
+   	Color color=Color.red;
+   	Mynotepad(){
+      initTextContent();
+   	  initMenu();
+   	  initAboutDialog();
+   	        }
+   	void initTextContent(){
+   		getContentPane().add(new JScrollPane(content));
+   		}
+      JTextPane content=new JTextPane(); 
+      JFileChooser openfile=new JFileChooser();
+      JColorChooser opencolor=new JColorChooser();
+      JDialog about=new JDialog(this);
+      JMenuBar menu=new JMenuBar();
+   	
+	JMenu[] menus=new JMenu[]{
+		new JMenu("文件"),
+		new JMenu("编辑"),
+		new JMenu("关于")
+	};
+	
+	JMenuItem optionofmenu[][]=new JMenuItem[][]{{
+		new JMenuItem("新建"),
+		new JMenuItem("打开"),
+		new JMenuItem("保存"),
+		new JMenuItem("退出")
+		         },
+		         
+		         {
+		        
+		new JMenuItem("复制"),         
+		new JMenuItem("剪切"),
+		new JMenuItem("粘贴"),
+		new JMenuItem("颜色")
+               },
+               {
+               new JMenuItem("关于")
+               }
+        };
+      void initMenu(){
+      	
+      	  for(int i=0;i<menus.length;i++){
+      	  	menu.add(menus[i]);
+      	  for(int j=0;j<optionofmenu[i].length;j++){
+      	  		menus[i].add(optionofmenu[i][j]);
+      	  		optionofmenu[i][j].addActionListener( action );
+      	  	}
+      	  }
+      	  this.setJMenuBar(menu);
+      } 
+     ActionListener action=new ActionListener(){                   
+     public void actionPerformed(ActionEvent e){
+     	String name = e.getActionCommand();
+		JMenuItem MI=(JMenuItem)e.getSource();
+		if("新建".equals(name)){
+			content.setText("");
+			file=null;
+		}
+		else if("打开".equals(name)){
+           if(file !=null)openfile.setSelectedFile(file);
+             int returnVal=openfile.showOpenDialog(Mynotepad.this);
+                 if(returnVal==JFileChooser.APPROVE_OPTION){
+
+                    file=openfile.getSelectedFile();
+                    unfold();
+                              }
+
+	     }
+		else if("保存".equals(name)){
+	      if(file!=null) openfile.setSelectedFile(file);
+            int returnVal=openfile.showSaveDialog(Mynotepad.this);
+                if(returnVal==JFileChooser.APPROVE_OPTION){
+                file=openfile.getSelectedFile();
+                  saveFile();
+                                  }
+           
+             }
+		else if("退出".equals(name)){
+               Mynotepad f=new Mynotepad();
+               int s=JOptionPane.showConfirmDialog(f,"退出？","退出",JOptionPane.YES_NO_OPTION);
+               if(s==JOptionPane.YES_OPTION)
+                System.exit(0);
+             }
+		else if("剪切".equals(name)){
+               content.cut();
+             }
+		else if("复制".equals(name)){
+               content.copy();
+             }
+		else if("粘贴".equals(name)){
+               content.paste();
+             }
+		else if("颜色".equals(name)){
+               color=JColorChooser.showDialog(Mynotepad.this,"",color);
+                 content.setForeground(color); 
+                 
+    }
+		else if("关于".equals(name)){
+              about.setSize(300,150);
+              about.show();
+     }
+    
+   } 
+ 
+     };
+ 
+     
+     void saveFile(){
+       try{
+        FileWriter Writef=new FileWriter(file);
+        Writef.write(content.getText());
+        Writef.close();
+         }
+    catch(Exception e){e.printStackTrace();}
+
+                  }                
+  
+  void unfold(){
+         try{
+              FileReader Readf=new FileReader(file);
+              int len=(int)file.length();
+              char []buffer=new char[len];
+              Readf.read(buffer,0,len);
+              Readf.close();
+              content.setText(new String(buffer));
+              }catch(Exception e){e.printStackTrace();}
+
+       }
+  
+  void initAboutDialog(){
+      about.setLayout(new GridLayout(3,1));
+      about.getContentPane().setBackground(Color.white);
+      about.getContentPane().add(new JLabel("张瑞的记事本程序"));
+      about.getContentPane().add(new JLabel("制作者：张瑞201303014091"));
+      about.getContentPane().add(new JLabel("2015年5月13日"));
+      about.setModal(true);
+      about.setSize(100,100);
+      about.setLocation(250,170);
+       }
+  
+   }   
+public class Notepad{
+	public static void main(String args[]){
+		 
+                Mynotepad noted=new Mynotepad();
+                
+              noted.addWindowListener(new WindowAdapter(){
+                  });
+                       noted.setTitle("张瑞的记事本程序");
+		               noted.setSize(640,320);
+		               noted.show();
+		               noted.setLocation(150,100);
+	}
+  }
